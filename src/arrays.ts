@@ -5,7 +5,9 @@
  * the number twice.
  */
 export function bookEndList(numbers: number[]): number[] {
-    return numbers;
+    if (numbers.length === 0) return [];
+    const numbys = [numbers[0], numbers[numbers.length - 1]];
+    return numbys;
 }
 
 /**
@@ -13,7 +15,8 @@ export function bookEndList(numbers: number[]): number[] {
  * number has been tripled (multiplied by 3).
  */
 export function tripleNumbers(numbers: number[]): number[] {
-    return numbers;
+    const doubled = numbers.map((num: number) => num * 3);
+    return doubled;
 }
 
 /**
@@ -21,9 +24,13 @@ export function tripleNumbers(numbers: number[]): number[] {
  * the number cannot be parsed as an integer, convert it to 0 instead.
  */
 export function stringsToIntegers(numbers: string[]): number[] {
-    return [];
+    const strings = numbers.map((num: string) =>
+        isNaN(parseInt(num)) ? 0 : parseInt(num),
+    );
+    return strings;
 }
-
+//https://stackoverflow.com/questions/42120046/typescript-isnan-only-accepts-a-number
+//Got isnan fucntion form here
 /**
  * Consume an array of strings and return them as numbers. Note that
  * the strings MAY have "$" symbols at the beginning, in which case
@@ -32,7 +39,13 @@ export function stringsToIntegers(numbers: string[]): number[] {
  */
 // Remember, you can write functions as lambdas too! They work exactly the same.
 export const removeDollars = (amounts: string[]): number[] => {
-    return [];
+    const newamounts = amounts.map((am: string) =>
+        am.slice(0, 1) === "$" ? am.slice(1) : am,
+    );
+    const strings = newamounts.map((num: string) =>
+        isNaN(parseInt(num)) ? 0 : parseInt(num),
+    );
+    return strings;
 };
 
 /**
@@ -41,7 +54,13 @@ export const removeDollars = (amounts: string[]): number[] => {
  * in question marks ("?").
  */
 export const shoutIfExclaiming = (messages: string[]): string[] => {
-    return [];
+    const newmessages = messages.filter(
+        (message: string) => message.slice(-1) !== "?",
+    );
+    const excl = newmessages.map((mess: string) =>
+        mess.slice(mess.length - 1) === "!" ? mess.toUpperCase() : mess,
+    );
+    return excl;
 };
 
 /**
@@ -49,7 +68,9 @@ export const shoutIfExclaiming = (messages: string[]): string[] => {
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    return 0;
+    const wordlist = words.filter((word: string) => word.length < 4);
+
+    return wordlist.length;
 }
 
 /**
@@ -58,7 +79,12 @@ export function countShortWords(words: string[]): number {
  * then return true.
  */
 export function allRGB(colors: string[]): boolean {
-    return false;
+    if (colors.length === 0) return true;
+    const coloring = colors.every(
+        (col: string): boolean =>
+            col === "red" || col === "green" || col === "blue",
+    );
+    return coloring;
 }
 
 /**
@@ -69,7 +95,12 @@ export function allRGB(colors: string[]): boolean {
  * And the array [] would become "0=0".
  */
 export function makeMath(addends: number[]): string {
-    return "";
+    if (addends.length === 0) {
+        return "0=0";
+    }
+    const join = addends.join("+");
+    const sum = addends.reduce((add: number, total: number) => add + total);
+    return `${sum}=${join}`;
 }
 
 /**
@@ -82,5 +113,20 @@ export function makeMath(addends: number[]): string {
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
 export function injectPositive(values: number[]): number[] {
-    return [];
+    const find = values.findIndex((price: number): boolean => price < 0);
+    if (find === -1) {
+        const sum = values.reduce(
+            (add: number, total: number) => add + total,
+            0,
+        );
+        const newyarray = [...values, sum];
+        return newyarray;
+    } else {
+        const newy = [...values.slice(0, find)];
+        const sum = newy.reduce((add: number, total: number) => add + total, 0);
+        const array = [...values];
+        array.splice(find + 1, 0, sum);
+
+        return array;
+    }
 }
